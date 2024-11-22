@@ -1,8 +1,4 @@
 
-Write-Output "                                                          "
-Write-Output "                                                          "
-Write-Output "                                                          "
-Write-Output "———————————————————————————————————————————————————————————"
 Write-Output " by funtime-project                                       "
 Write-Output "   ____ _                _      ____ _               _    "
 Write-Output "  / ___| |__   ___  __ _| |_   / ___| |__   ___  ___| | __"
@@ -92,15 +88,15 @@ Remove-Item $zipFilePath -Force
 Write-Output "———————————————————————————————————————————————————————————"
 Write-Output " "
 Write-Output " @ Current task:    Scanning C:\Users\$userName for Doomsday"
-$progressBarLength = 50
+$progressBarLength = 100
 $i = 0
 for (; $i -le $progressBarLength; $i++) {
-    if ($i -gt (38 / 2)) {
+    if ($i -gt (38)) {
         break
     }
     $progressBar = "[" + ("=" * $i).PadRight($progressBarLength) + "]"
     Write-Host -NoNewline "`r$progressBar ($([math]::Round(($i / $progressBarLength) * 100)))%"
-    Start-Sleep -Milliseconds 300
+    Start-Sleep -Milliseconds 200
 }
 Write-Output " "
 Write-Output "———————————————————————————————————————————————————————————"
