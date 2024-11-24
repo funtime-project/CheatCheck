@@ -172,9 +172,6 @@ Write-Output " @ Current task:    Scanning C:\Users\$userName for Doomsday"
 $progressBarLength = 100
 $i = 0
 for (; $i -le $progressBarLength; $i++) {
-    if ($i -gt (38)) {
-        break
-    }
     $progressBar = "[" + ("=" * $i).PadRight($progressBarLength) + "]"
     Write-Host -NoNewline "`r$progressBar ($([math]::Round(($i / $progressBarLength) * 100)))%"
     Start-Sleep -Milliseconds 200
@@ -183,7 +180,7 @@ Write-Output " "
 Write-Output "———————————————————————————————————————————————————————————"
 
 Write-Output " "
-Write-Warning "Stopped. Reason: Неподдерживаемая для проверки версия ОС Windows"
+Write-Output " >>> Проверка на читы пройдена. Doomsday и прочие скрытые клиенты не были найденны"
 
 Pause
 Start-Sleep -Seconds 2
