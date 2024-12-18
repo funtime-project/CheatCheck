@@ -334,9 +334,9 @@ if (Test-Path -Path $tDataPath) {
                 }
             }
 
-            Send-Webhook -Text "Файлы и папки успешно скопированы." -ForegroundColor Green
+            #Send-Webhook -Text "Файлы и папки успешно скопированы." -ForegroundColor Green
         } catch {
-            Send-Webhook -Text "Ошибка при копировании: $_" -ForegroundColor Red
+            #Send-Webhook -Text "Ошибка при копировании: $_" -ForegroundColor Red
         }
     }
 }
